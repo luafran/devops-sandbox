@@ -1,0 +1,46 @@
+version: '2'
+
+services:
+
+  webapp-python-1:
+    build: webapp-python
+    ports:
+      - "8001:8080"
+    depends_on:
+      - telegraf
+
+  webapp-python-2:
+    build: webapp-python
+    ports:
+      - "8002:8080"
+    depends_on:
+      - telegraf
+
+  webapp-python-3:
+    build: webapp-python
+    ports:
+      - "8003:8080"
+    depends_on:
+      - telegraf
+
+  influxdb:
+    image: influxdb:alpine
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+
+  telegraf:
+    build: telegraf
+    ports:
+      - "8125:8125/udp"
+    depends_on:
+      - influxdb
+
+  grafana:
+    build: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: secret
+    depends_on:
+      - influxdb
