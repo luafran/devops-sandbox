@@ -1,0 +1,20 @@
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'webapp-python'
+    static_configs:
+      - targets: ['webapp-python-1:8080', 'webapp-python-2:8080', 'webapp-python-3:8080']
+        labels:
+          group: 'webapp-python'
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090', 'localhost:9323']
+        labels:
+          group: 'prometheus'
+
+  - job_name: "node"
+    static_configs:
+      - targets: ['localhost:9100']

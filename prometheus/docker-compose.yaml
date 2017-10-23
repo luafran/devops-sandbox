@@ -1,0 +1,35 @@
+version: '2'
+
+services:
+
+  webapp-python-1:
+    build: webapp-python
+    ports:
+      - "8001:8080"
+
+  webapp-python-2:
+    build: webapp-python
+    ports:
+      - "8002:8080"
+
+  webapp-python-3:
+    build: webapp-python
+    ports:
+      - "8003:8080"
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/data:/prometheus
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: secret
+    depends_on:
+      - prometheus
